@@ -18,7 +18,7 @@ forge install OsoTega/eval-utils-lib --no-commit
 ## Importing to Project
 import the library at the top of the contract you want to use it in
 ```solidity
-//importing the string array library
+//importing the eval utils library
 import {EvalUtils} from "eval-utils-lib/EvalUtils.sol"
 ```
 
