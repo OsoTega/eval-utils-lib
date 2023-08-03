@@ -1,5 +1,27 @@
 //SPDX-License-Identifier: MIT
 
+/*
+ * @title String Evaluation Utils Library for Solidity contracts.
+ * @author Tega Osowa <https://tega-osowa-portfolio.netlify.app/>
+ *
+ * @dev This is a comprehensive string evaluation utils library for processing and
+ *      programmatically working with arithmetic strings of primitive data. This
+ *      library is focused on making arithmetic task on strings more user-friendly, or
+ *      programmer friendly.This is a comprehensive string evaluation utils library for
+ *      processing and programmatically working with arithmetic strings of primitive
+ *      data. This library is focused on making arithmetic task on strings more
+ *      user-friendly, or programmer friendly.
+ *
+ *      The gas cost for implementing various operations would definitely defer,
+ *      depending on the size and length of the string being processed. For large strings,
+ *      pre-processing is advised, so as to reduce the gas cost. The operation consumes much more
+ *      gas  and is advised to be used wisely, preferably on smaller strings.
+ *      All functions are written with simplicity in mind, and should be easy to use and
+ *      implement, please feel free to make any request or update for request to me,
+ *      it's still a work in progress, and this contribution is important to the Web3 Community.
+ *      Code Away
+ */
+
 pragma solidity ^0.8.18;
 
 import {StringsArrayUtilsLib} from "array-utils-lib/array-utils/StringsArrayUtilsLib.sol";
@@ -9,6 +31,11 @@ library EvalUtils {
     using StringsArrayUtilsLib for string[];
     using StringUtilsLib for string;
 
+    /*
+     * @dev Checks if the string is an operation or number
+     * @param eval The string to check.
+     * @return A bool if the string is an operation.
+     */
     function isOperator(string memory val) private pure returns (bool) {
         string[] memory actions = new string[](4);
         actions[0] = "+";
@@ -19,6 +46,12 @@ library EvalUtils {
         return actions.includes(val);
     }
 
+    /*
+     * @dev Retrieves all the brackets from the string
+     * @param index The index to start checking from.
+     * @param text The string to check.
+     * @return The index where the closing bracket was found, and the content of the bracket.
+     */
     function getBrackets(
         uint256 index,
         string memory text
@@ -36,6 +69,15 @@ library EvalUtils {
         return (textBrack, indexBrack + 1);
     }
 
+    /*
+     * @dev Retrieves the list of all numbers and operations in the string recursively
+     * @param i The index to start checking from.
+     * @param pa The array to save the found string.
+     * @param evaluateA The string to check.
+     * @param ca A variable fro keeping track
+     * @param paCount A variable for counting the index in the array.
+     * @return Nothing to return.
+     */
     function getOperatingList(
         uint256 i,
         string[] memory pa,
@@ -66,6 +108,12 @@ library EvalUtils {
         }
     }
 
+    /*
+     * @dev Looks ahead to return next operand
+     * @param array The string array to check.
+     * @param index The index of the array to look from.
+     * @return Null if the index is greater than the array, return the operand.
+     */
     function getNextOperand(
         string[] memory array,
         uint256 index
@@ -73,6 +121,13 @@ library EvalUtils {
         return (index + 2) > (array.length - 1) ? "Null" : array[index + 2];
     }
 
+    /*
+     * @dev Arithmetic operation using the operand
+     * @param first The first string of the arithmetic.
+     * @param operator The operand string of the arithmetic.
+     * @param second The second string of the arithmetic.
+     * @return The evaluted result as a string.
+     */
     function arithmetic(
         string memory first,
         string memory operator,
@@ -91,6 +146,13 @@ library EvalUtils {
         return StringUtilsLib.parseString(result);
     }
 
+    /*
+     * @dev Uses recusion to evaluate the array of strings
+     * @param array The array of strings to evaluate.
+     * @param scoreChar An array of the operands.
+     * @param score An array of the scores of every operand.
+     * @return The evaluated first element from the array
+     */
     function createTree(
         string[] memory array,
         string[] memory scoreChar,
@@ -148,6 +210,11 @@ library EvalUtils {
         }
     }
 
+    /*
+     * @dev Returns the string array
+     * @param cal the string to evaluate
+     * @return The string array
+     */
     function getList(string memory cal) private pure returns (string[] memory) {
         string[] memory pa = new string[](cal.length());
         uint256 ca = 0;
@@ -155,6 +222,11 @@ library EvalUtils {
         return pa.trim();
     }
 
+    /*
+     * @dev Evaluates the string
+     * @param eval The string to compute.
+     * @return The number.
+     */
     function evaluate(string memory eval) internal pure returns (uint256) {
         string[] memory array = getList(eval);
         string[] memory scoreChar = new string[](4);
