@@ -20,7 +20,6 @@ import the library at the top of the contract you want to use it in
 ```solidity
 //importing the string array library
 import {EvalUtils} from "eval-utils-lib/EvalUtils.sol"
-}
 ```
 
 ## Using the evaluate function
